@@ -2,6 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, PasswordField
 from wtforms.fields import EmailField
 from wtforms.validators import DataRequired, Length, EqualTo, Email
+# pip install email_validator
+# pip install Flask_WTF
 
 class UserCreateForm(FlaskForm):
     username=StringField('아이디',validators=[DataRequired(),Length(min=3, max=25)])
