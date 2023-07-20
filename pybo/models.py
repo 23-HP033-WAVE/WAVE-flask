@@ -25,6 +25,7 @@ get_badge = db.Table(
         'badge.id', ondelete='CASCADE'), primary_key=True)
 )
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
