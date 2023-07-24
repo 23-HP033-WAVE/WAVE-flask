@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if post_list %}
+<ul>
+    {% for post in post_list %}
+    <li><a href="/posts/{{ post.id }}/">{{ post.subject }}</a>&nbsp&nbsp&nbsp&nbsp{{ post.reporter.username }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>질문이 없습니다. </p>
+{% endif %}
+</body>
+</html>
