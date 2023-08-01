@@ -1,3 +1,12 @@
+<div>
+    {% if g.user %}
+        <a class="nav-link" href="{{ url_for('auth.logout') }}">{{ g.user.username }} (로그아웃)</a>
+    {% else %}
+    <a class="nav-link" href="{{ url_for('auth.signup') }}">계정 생성</a>
+    <a class="nav-link" href="{{ url_for('auth.login') }}">로그인</a>
+    {% endif %}
+</div>
+
 {% if post_list %}
 <ul>
     {% for post in post_list %}

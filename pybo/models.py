@@ -26,7 +26,7 @@ class User(db.Model):
     pnum = db.Column(db.String(13), unique=True, nullable=False)
     location = db.Column(db.String(30), nullable=True)
     admin = db.Column(db.Boolean, default=False)
-    process = db.relationship('User', secondary=process_post, backref=db.backref('process_post_set'))
+    process = db.relationship('Post', secondary=process_post, backref=db.backref('process_post_set'))
     badges = db.relationship('Badge', secondary=get_badge, backref=db.backref('badges_set'))
 
 
@@ -36,6 +36,7 @@ class Post(db.Model):
     content = db.Column(db.Text(), nullable=False)
     created_date = db.Column(db.DateTime(), nullable=False)
     modified_date = db.Column(db.DateTime(), nullable=True)
+    processed_date = db.Column(db.DateTime(), nullable=True)
     address = db.Column(db.String(100), nullable=False)
     reporter_id = db.Column(db.Integer, db.ForeignKey(
         'user.id', ondelete='CASCADE'), nullable=False)
