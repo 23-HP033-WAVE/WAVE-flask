@@ -16,7 +16,7 @@ def signup():
         user= User.query.filter_by(username=form.username.data).first()
         if not user:
             user= User(username=form.username.data, password=generate_password_hash(form.password1.data),
-                       email=form.email.data, pnum=form.pnum.data)
+                       email=form.email.data, pnum=form.pnum.data, admin=form.admin.data)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('main.index'))
@@ -37,7 +37,7 @@ def login():
         if error is None:
             session.clear()
             session['user_id']=user.id
-            return redirect(url_for('main.index'))
+            return redirect(url_for('post.read_posts'))
         flash(error)
     return render_template('auth/login.html',form=form)
 

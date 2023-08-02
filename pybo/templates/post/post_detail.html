@@ -10,3 +10,13 @@
 <div>
     {{ post.address }}
 </div>
+<div>
+    {% if post.processed_date %}
+    처리 완
+    {% else %}
+    아직 처리 안됨
+    {% endif %}
+</div>
+<div>
+    <a href="/admin/{{ post.id }}/"> 신고처리 </a>
+</div>
