@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Post</title>
+</head>
+<body>
+    <h1>Edit Post</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        <p>
+            {{ form.subject.label }}<br>
+            {{ form.subject(size=30) }}
+            {% if form.subject.errors %}
+                <ul>
+                    {% for error in form.subject.errors %}
+                        <li style="color: red;">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.content.label }}<br>
+            {{ form.content(rows=10, cols=50) }}
+            {% if form.content.errors %}
+                <ul>
+                    {% for error in form.content.errors %}
+                        <li style="color: red;">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.image.label }}<br>
+            {{ form.image }}
+            {% if form.image.errors %}
+                <ul>
+                    {% for error in form.image.errors %}
+                        <li style="color: red;">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.address.label }}<br>
+            {{ form.address(size=30) }}
+            {% if form.address.errors %}
+                <ul>
+                    {% for error in form.address.errors %}
+                        <li style="color: red;">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p><input type="submit" value="Update"></p>
+    </form>
+    <a href="{{ url_for('post.read_posts') }}">Back to Posts</a>
+</body>
+</html>

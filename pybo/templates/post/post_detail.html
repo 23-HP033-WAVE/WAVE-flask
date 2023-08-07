@@ -11,6 +11,12 @@
     {{ post.address }}
 </div>
 <div>
+    {% if post.image_key %}
+    <img src="{{ url_for('static', filename=post.image_key) }}" alt="{{ post.title }}">
+    {% endif %}
+</div>
+<div><p>address: {{ post.address }}</p></div>
+<div>
     {% if post.processed_date %}
     처리 완
     {% else %}
@@ -19,4 +25,7 @@
 </div>
 <div>
     <a href="/admin/{{ post.id }}/"> 신고처리 </a>
+</div>
+<div>
+    <a href="/posts/edit/{{ post.id }}/"> 신고수정 </a>
 </div>

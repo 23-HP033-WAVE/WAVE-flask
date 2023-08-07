@@ -41,6 +41,7 @@ class Post(db.Model):
     reporter_id = db.Column(db.Integer, db.ForeignKey(
         'user.id', ondelete='CASCADE'), nullable=False)
     reporter = db.relationship('User', backref=db.backref('post_set'))
+    image_key = db.Column(db.String(100))
 
 
 class Badge(db.Model):
