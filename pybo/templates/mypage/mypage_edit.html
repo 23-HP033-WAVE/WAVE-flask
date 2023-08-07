@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>회원정보 수정</title>
+</head>
+<body>
+  <h2>회원정보 수정</h2>
+  <form method="post">
+    {{ form.csrf_token }}
+    <label for="username">이름:</label>
+    <input type="text" id="username" name="username" required><br>
+    <label for="email">이메일:</label>
+    <input type="email" id="email" name="email" required><br>
+    <label for="pnum">전화번호:</label>
+    <input type="text" id="pnum" name="pnum"><br>
+    <label for="location">주활동지역:</label>
+    <input type="text" id="location" name="location"><br>
+    <input type="submit" value="수정하기">
+  </form>
+</body>
+</html>

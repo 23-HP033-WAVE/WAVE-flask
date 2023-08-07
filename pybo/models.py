@@ -28,6 +28,7 @@ class User(db.Model):
     admin = db.Column(db.Boolean, default=False)
     process = db.relationship('Post', secondary=process_post, backref=db.backref('process_post_set'))
     badges = db.relationship('Badge', secondary=get_badge, backref=db.backref('badges_set'))
+    user_img=db.Column(db.String(254), nullable=True) #유저 이미지 추가
 
 
 class Post(db.Model):
