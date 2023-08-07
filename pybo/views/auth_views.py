@@ -1,3 +1,4 @@
+import functools
 from flask import Blueprint, url_for, render_template, flash, request, session, g
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
@@ -15,7 +16,7 @@ def signup():
         user= User.query.filter_by(username=form.username.data).first()
         if not user:
             user= User(username=form.username.data, password=generate_password_hash(form.password1.data),
-                       email=form.email.data, pnum=form.pnum.data)
+                       email=form.email.data, pnum=form.pnum.data, admin=form.admin.data)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('main.index'))
@@ -36,8 +37,8 @@ def login():
         if error is None:
             session.clear()
             session['user_id']=user.id
-            return '로그인 성공 %d %s' %(session.get('user_id'),g.user.username)
-        #flash(error)
+            return redirect(url_for('post.read_posts'))
+        flash(error)
     return render_template('auth/login.html',form=form)
 
 @bp.before_app_request
@@ -51,4 +52,12 @@ def load_logged_in_user():
 @bp.route('/logout')
 def logout():
     session.clear()
-    return '로그아웃 성공'
+    return redirect(url_for('main.index'))
+
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return redirect(url_for('auth.login'))
+        return view(**kwargs)
+    return wrapped_view

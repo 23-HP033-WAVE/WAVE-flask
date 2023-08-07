@@ -1,4 +1,7 @@
-from flask import Blueprint
+from flask import Blueprint, url_for
+from werkzeug.utils import redirect
+
+from pybo.models import Post, User
 
 bp = Blueprint('main', __name__, url_prefix='/')
 
@@ -10,4 +13,8 @@ def hello_pybo():
 
 @bp.route('/')
 def index():
-    return 'Pybo index'
+    return redirect(url_for('post.read_posts'))
+
+
+
+
