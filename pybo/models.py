@@ -37,6 +37,7 @@ class User(db.Model):
     report = db.relationship('User', secondary=report_post, backref=db.backref('report_post_set'))
     process = db.relationship('User', secondary=process_post, backref=db.backref('process_post_set'))
     badges = db.relationship('Badge', secondary=get_badge, backref=db.backref('badges_set'))
+    user_img=db.Column(db.String(254), nullable=True) #유저 이미지 추가
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)

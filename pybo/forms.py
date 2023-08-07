@@ -15,3 +15,9 @@ class UserCreateForm(FlaskForm):
 class UserLoginForm(FlaskForm):
     username=StringField('아이디',validators=[DataRequired(),Length(min=3,max=25)])
     password=PasswordField('비밀번호',validators=[DataRequired()])
+
+class UserModifyForm(FlaskForm): #회원 정보 수정 form
+    username=StringField('이름',validators=[DataRequired(),Length(min=3,max=25)])
+    email=EmailField('이메일',[DataRequired(),Email()])
+    pnum=StringField('전화번호',validators=[DataRequired()])
+    location=StringField('주활동지역',validators=[DataRequired()])
