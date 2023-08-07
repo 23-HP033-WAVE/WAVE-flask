@@ -13,6 +13,8 @@
     <li><a href="/posts/{{ post.id }}/">{{ post.subject }}</a>&nbsp&nbsp&nbsp&nbsp{{ post.reporter.username }}</li>
     {% endfor %}
 </ul>
+<div><a href="{{ url_for('post.create') }}">Create New Post</a></div>
 {% else %}
 <p>질문이 없습니다. </p>
+<div><a href="{{ url_for('post.create') }}">Create New Post</a></div>
 {% endif %}
