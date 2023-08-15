@@ -4,9 +4,22 @@ from werkzeug.utils import redirect
 
 from pybo import db
 from pybo.forms import UserModifyForm
-from pybo.models import User
+from pybo.models import User, Post, Badge
 
-bp=Blueprint('mypage', __name__, url_prefix='/mypage')
+bp = Blueprint('mypage', __name__, url_prefix='/mypage')
+
+
+@bp.route('/')
+def mypage():
+    return render_template('mypage/mypage.html')
+
+
+@bp.route('/posts/<int:userid>/')
+def read_posts(userid):
+    post_list = Post.query.order_by(Post.created_date.desc())
+    post_list = post_list.filter(Post.reporter == g.user)
+    return render_template('mypage/mypost_list.html', post_list=post_list)
+
 
 @bp.route('/modify/<int:userid>/',methods=('GET','POST'))
 def modify_user(userid): #회원정보 수정
@@ -33,6 +46,14 @@ def delete_user(userid): #회원 탈퇴
     db.session.delete(user)
     db.session.commit()
     return redirect(url_for('main.index'))
+
+
+@bp.route('/badges/<int:userid>/')
+def read_badges(userid):
+    user = User.query.get_or_404(userid)
+    badges = user.badges
+    return render_template('mypage/badges.html', badges=badges)
+
 
 @bp.before_app_request
 def load_logged_in_user():
