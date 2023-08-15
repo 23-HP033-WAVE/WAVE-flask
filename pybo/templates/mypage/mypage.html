@@ -5,6 +5,15 @@
     <title>Title</title>
 </head>
 <body>
-
+<h2>{{ g.user.username }} 의 마이페이지</h2>
+<div>
+    <a href="/mypage/modify/{{ g.user.id }}/">회원수정</a>
+</div>
+<div>
+    <a href="/mypage/posts/{{ g.user.id }}">내가 쓴 글 조회하기</a>
+</div>
+<div>
+    <a href="/mypage/badges/{{ g.user.id }}">뱃지 확인하기</a>
+</div>
 </body>
 </html>

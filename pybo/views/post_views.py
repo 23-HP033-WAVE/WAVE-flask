@@ -4,7 +4,7 @@ from pybo.forms import PostForm
 from datetime import datetime
 
 from pybo import db
-from pybo.models import Post
+from pybo.models import Post, User, Badge
 from pybo.views.auth_views import login_required
 
 bp = Blueprint('post', __name__, url_prefix='/posts')
@@ -31,7 +31,7 @@ def create():
         content = form.content.data
         image = form.image.data
         address = form.address.data
-        user = g.user
+        user = User.query.get_or_404(g.user.id)
 
         if image:
             image_key = save_to_s3(image, app.config['AWS_BUCKET_NAME'])
@@ -43,6 +43,20 @@ def create():
         db.session.add(post)
         db.session.commit()
         post_list = Post.query.order_by(Post.created_date.desc())
+        user_post_list = post_list.filter(Post.reporter == user)
+        if user_post_list.count() == 1:
+            badge = Badge.query.get_or_404(1)
+            user.badges.append(badge)
+            db.session.commit()
+        elif user_post_list.count() == 3:
+            badge = Badge.query.get_or_404(2)
+            user.badges.append(badge)
+            db.session.commit()
+        elif user_post_list.count() == 5:
+            badge = Badge.query.get_or_404(3)
+            user.badges.append(badge)
+            db.session.commit()
+
         return render_template('post/post_list.html', post_list=post_list)
 
     return render_template('post/create.html', form=form)

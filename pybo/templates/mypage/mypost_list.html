@@ -8,7 +8,7 @@
 {% if post_list %}
 <ul>
     {% for post in post_list %}
-    <li><a href="/posts/{{ post.id }}/">{{ post.subject }}</a>&nbsp&nbsp&nbsp&nbsp{{ post.reporter.username }}</li>
+    <li><a href="/posts/{{ post.id }}/">{{ post.subject }}</a></li>
     {% endfor %}
 </ul>
 {% else %}
