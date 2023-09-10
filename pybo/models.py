@@ -50,7 +50,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     subject = db.Column(db.Text(), nullable=False)
     content = db.Column(db.Text(), nullable=False)
-    created_date = db.Column(db.DateTime(), nullable=False)
+    created_date = db.Column(db.DateTime(), nullable=True)
     modified_date = db.Column(db.DateTime(), nullable=True)
     processed_date = db.Column(db.DateTime(), nullable=True)
     address = db.Column(db.String(100), nullable=False)
@@ -65,7 +65,7 @@ class Post(db.Model):
             'id': self.id,
             'subject': self.subject,
             'content': self.content,
-            'created_date': self.created_date.strftime('%Y-%m-%d %H:%M:%S'),
+            'created_date': self.created_date.strftime('%Y-%m-%d %H:%M:%S') if self.created_date else None,
             'modified_date': self.modified_date.strftime('%Y-%m-%d %H:%M:%S') if self.modified_date else None,
             'processed_date': self.processed_date.strftime('%Y-%m-%d %H:%M:%S') if self.processed_date else None,
             'address': self.address,

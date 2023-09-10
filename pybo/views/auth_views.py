@@ -32,19 +32,12 @@ def signup():
         new_user=request.get_json()
         username=new_user['username']
         password=new_user['password']
-    else:
+        re_password=new_user[]
+    else: #GET 방식일 경우 User 전체 조회 코드
         users=User.query.all()
         res=jsonify([user.serialize() for user in users])
 
     return res
-
-def json_default(value):
-  if isinstance(value, datetime.date):
-    return value.strftime('%Y-%m-%d')
-  raise TypeError('not JSON serializable')
-
-data = {'date': datetime.date.today()}
-json_data = json.dumps(data, default=json_default)
 
 '''
 @bp.route('/login/',methods=('GET','POST'))
