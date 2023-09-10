@@ -31,6 +31,21 @@ class User(db.Model):
     user_img=db.Column(db.String(254), nullable=True) #유저 이미지 추가
 
 
+    def serialize(self):  # 이것이 직렬화하여 json형태로 한것이다.
+        return {
+            'id': self.id,
+            'username':self.username,
+            'password': self.password,
+            'email':self.email,
+            'pnum':self.pnum,
+            'location':self.location,
+            'admin':self.admin,
+            'process': [post.serialize() for post in self.process],
+            'badges': [badge.serialize() for badge in self.badges],
+            'user_img':self.user_img,
+        }
+
+
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     subject = db.Column(db.Text(), nullable=False)
@@ -45,7 +60,27 @@ class Post(db.Model):
     image_key = db.Column(db.String(100))
 
 
+    def serialize(self):
+        return {
+            'id': self.id,
+            'subject': self.subject,
+            'content': self.content,
+            'created_date': self.created_date.strftime('%Y-%m-%d %H:%M:%S'),
+            'modified_date': self.modified_date.strftime('%Y-%m-%d %H:%M:%S') if self.modified_date else None,
+            'processed_date': self.processed_date.strftime('%Y-%m-%d %H:%M:%S') if self.processed_date else None,
+            'address': self.address,
+            'reporter_id': self.reporter_id,
+            'image_key': self.image_key,
+        }
+
+
 class Badge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     badgename = db.Column(db.String(120), nullable=False)
 
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'badgename':self.badgename,
+        }

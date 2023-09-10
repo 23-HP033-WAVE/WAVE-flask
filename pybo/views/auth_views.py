@@ -1,5 +1,6 @@
 import functools
-from flask import Blueprint, url_for, render_template, flash, request, session, g
+import datetime, json
+from flask import Blueprint, url_for, render_template, flash, request, session, g, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
 
@@ -7,8 +8,9 @@ from pybo import db
 from pybo.forms import UserCreateForm, UserLoginForm
 from pybo.models import User
 
-bp=Blueprint('auth',__name__, url_prefix='/auth')
+bp = Blueprint('auth', __name__, url_prefix='/auth')
 
+'''
 @bp.route('/signup/',methods=('GET','POST'))
 def signup():
     form = UserCreateForm()
@@ -23,7 +25,28 @@ def signup():
         else:
             flash('이미 존재하는 사용자입니다.')
     return render_template('auth/signup.html',form=form)
+'''
+@bp.route('/signup/',methods=('GET','POST'))
+def signup():
+    if request.method =='POST':
+        new_user=request.get_json()
+        username=new_user['username']
+        password=new_user['password']
+    else:
+        users=User.query.all()
+        res=jsonify([user.serialize() for user in users])
 
+    return res
+
+def json_default(value):
+  if isinstance(value, datetime.date):
+    return value.strftime('%Y-%m-%d')
+  raise TypeError('not JSON serializable')
+
+data = {'date': datetime.date.today()}
+json_data = json.dumps(data, default=json_default)
+
+'''
 @bp.route('/login/',methods=('GET','POST'))
 def login():
     form=UserLoginForm()
@@ -40,6 +63,9 @@ def login():
             return redirect(url_for('post.read_posts'))
         flash(error)
     return render_template('auth/login.html',form=form)
+'''
+
+
 
 @bp.before_app_request
 def load_logged_in_user():
