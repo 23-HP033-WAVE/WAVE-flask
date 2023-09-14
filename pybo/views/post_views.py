@@ -4,7 +4,7 @@ from pybo.forms import PostForm
 from datetime import datetime
 
 from pybo import db
-from pybo.models import Post, User
+from pybo.models import Post, User, Badge
 from pybo.views.auth_views import login_required
 
 bp = Blueprint('post', __name__, url_prefix='/posts')

@@ -1,6 +1,8 @@
 <div>
     {% if g.user %}
         <a class="nav-link" href="{{ url_for('auth.logout') }}">{{ g.user.username }} (로그아웃)</a>
+        <div>
+        <a href="{{ url_for('mypage.mypage') }}">마이페이지</a></div>
     {% else %}
     <a class="nav-link" href="{{ url_for('auth.signup') }}">계정 생성</a>
     <a class="nav-link" href="{{ url_for('auth.login') }}">로그인</a>
@@ -14,6 +16,7 @@
     {% endfor %}
 </ul>
 <div><a href="{{ url_for('post.create') }}">Create New Post</a></div>
+
 {% else %}
 <p>질문이 없습니다. </p>
 <div><a href="{{ url_for('post.create') }}">Create New Post</a></div>
