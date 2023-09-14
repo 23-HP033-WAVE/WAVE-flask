@@ -13,7 +13,7 @@ import os
 bp = Blueprint('detect',__name__, url_prefix='/detect')
 
 # yolo model 불러오기
-model = torch.hub.load('C:/projects/project/pybo/yolov5', 'custom', path='C:/projects/project/pybo/yolov5/runs/train/trash_yolov5l_results4/weights/best.pt', source='local',force_reload=True)
+model = torch.hub.load('./pybo/yolov5', 'custom', path='./pybo/yolov5/runs/train/trash_yolov5l_results4/weights/best.pt', source='local',force_reload=True)
 
 # POST 통신으로 들어오는 이미지를 저장하고 모델로 추론하는 과정
 def save_image(file):
