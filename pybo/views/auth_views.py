@@ -29,10 +29,14 @@ def signup():
 @bp.route('/signup/',methods=('GET','POST'))
 def signup():
     if request.method =='POST':
-        new_user=request.get_json()
-        username=new_user['username']
-        password=new_user['password']
-        re_password=new_user[]
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
+        re_password=data.get('re_password') #비밀번호 확인
+        email=data.get('email')
+        pnum=data.get('pnum')
+        admin=data.get('admin')
+
     else: #GET 방식일 경우 User 전체 조회 코드
         users=User.query.all()
         res=jsonify([user.serialize() for user in users])
