@@ -4,7 +4,6 @@ from datetime import datetime
 
 from pybo import db
 from pybo.models import Post, User, Badge
-from pybo.views.auth_views import login_required
 
 bp = Blueprint('post', __name__, url_prefix='/posts')
 app = Flask(__name__)
@@ -22,8 +21,6 @@ def read_post(post_id):
     post = Post.query.get(post_id)
     result = jsonify([post.serialize()])
     return result
-#
-#
 
 
 @bp.route('/create/', methods=['POST'])
@@ -66,13 +63,10 @@ def create():
     return jsonify(post.serialize())
 
 
-@login_required
 @bp.route('/delete/<int:post_id>/', methods=['DELETE'])
 def delete_post(post_id):
     post = Post.query.get_or_404(post_id)
 
-    # if g.user.id != post.reporter_id:
-    #     return "권한이 없습니다", 403
     db.session.delete(post)
     db.session.commit()
     return redirect(url_for('post.read_posts'))
@@ -93,4 +87,21 @@ def edit(post_id):
     db.session.commit()
     result = jsonify([post.serialize()])
     return result
+
+
+@bp.route('/search/', methods=['POST'])
+def search():
+    keyword = request.get_json()['keyword']
+    post_list = Post.query
+    if keyword:
+        kw = '%%{}%%'.format(keyword)
+        post_list = post_list\
+            .join(User, Post.reporter_id == User.id)\
+            .filter(Post.subject.ilike(kw) |
+                    Post.content.ilike(kw) |
+                    Post.address.ilike(kw) |
+                    User.username.ilike(kw)).distinct()
+    return jsonify([post.serialize() for post in post_list])
+
+
 

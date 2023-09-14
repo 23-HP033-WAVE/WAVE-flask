@@ -31,11 +31,10 @@ def create_app():
     from . import models
 
 # 블루 프린트
-    from .views import main_views, auth_views, post_views, user_views, admin_views, mypage_views
+    from .views import main_views, auth_views, post_views,admin_views, mypage_views
     app.register_blueprint(main_views.bp)
     app.register_blueprint(auth_views.bp)
     app.register_blueprint(post_views.bp)
-    app.register_blueprint(user_views.bp)
     app.register_blueprint(admin_views.bp)
     app.register_blueprint(mypage_views.bp)
 

@@ -28,7 +28,7 @@ class User(db.Model):
     admin = db.Column(db.Boolean, default=False)
     process = db.relationship('Post', secondary=process_post, backref=db.backref('process_post_set'))
     badges = db.relationship('Badge', secondary=get_badge, backref=db.backref('badges_set'))
-    user_img=db.Column(db.String(254), nullable=True) #유저 이미지 추가
+    user_img = db.Column(db.String(254), nullable=True) #유저 이미지 추가
 
     def serialize(self):  # 이것이 직렬화하여 json형태로 한것이다.
         return {
