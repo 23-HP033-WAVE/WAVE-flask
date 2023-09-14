@@ -36,7 +36,6 @@ def create_app():
     app.register_blueprint(main_views.bp)
     app.register_blueprint(auth_views.bp)
     app.register_blueprint(post_views.bp)
-    app.register_blueprint(user_views.bp)
     app.register_blueprint(admin_views.bp)
     app.register_blueprint(mypage_views.bp)
     app.register_blueprint(detect_views.bp)
