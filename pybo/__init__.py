@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 
 import config
+import os
 
 naming_convention = {
     "ix": "ix_%(column_0_label)s",
@@ -20,7 +21,8 @@ migrate = Migrate()
 def create_app():
     app = Flask(__name__)
     app.config.from_object(config)
-    app.config['UPLOAD_FOLDER'] = './temp'
+    app.config['UPLOAD_FOLDER'] = os.getcwd() + '/'
+
 
     # ORM
     db.init_app(app)
