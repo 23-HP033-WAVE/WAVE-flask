@@ -2,9 +2,11 @@ from flask import Blueprint, request, session, g, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from pybo import db
+
 from pybo.models import User
 
-bp=Blueprint('auth', __name__, url_prefix='/auth')
+
+bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 
 @bp.route('/signup/', methods=['POST'])

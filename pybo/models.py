@@ -1,6 +1,5 @@
 from pybo import db
 
-
 process_post = db.Table(
     'process_post',
     db.Column('user_id', db.Integer, db.ForeignKey(

@@ -3,6 +3,7 @@ from datetime import datetime
 from flask import Blueprint, render_template, flash, g
 
 from pybo import db
+
 from pybo.models import Post
 
 bp = Blueprint('admin', __name__, url_prefix='/admin')

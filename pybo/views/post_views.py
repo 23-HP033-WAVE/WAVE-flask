@@ -1,12 +1,10 @@
-from flask import Flask, Blueprint, redirect, url_for, request, jsonify, current_app
-from pybo.s3_helper import save_to_s3
+from flask import Blueprint, redirect, url_for, request, jsonify
 from datetime import datetime
-
 from pybo import db
+
 from pybo.models import Post, User, Badge
 
 bp = Blueprint('post', __name__, url_prefix='/posts')
-app = Flask(__name__)
 
 
 @bp.route('/list/', methods=['GET'])
