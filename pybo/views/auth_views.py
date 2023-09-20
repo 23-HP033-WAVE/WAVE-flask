@@ -16,10 +16,14 @@ def signup():
     password = generate_password_hash(params['password'])
     email = params['email']
     pnum = params['pnum']
+
     admin = params['admin']
+    user_img = params['user_img']
+
+
     location = params['location']
     user = User(username=username, password=password,
-                location=location, email=email, pnum=pnum, admin=admin)
+                location=location, email=email, pnum=pnum, admin=admin, user_img=user_img)
     db.session.add(user)
     db.session.commit()
     # return jsonify(user.serialize())
