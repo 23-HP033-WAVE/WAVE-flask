@@ -1,86 +1,50 @@
-import functools
-import datetime, json
-from flask import Blueprint, url_for, render_template, flash, request, session, g, jsonify
+from flask import Blueprint, request, session, g, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import redirect
 
 from pybo import db
-from pybo.forms import UserCreateForm, UserLoginForm
+
 from pybo.models import User
+
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-'''
-@bp.route('/signup/',methods=('GET','POST'))
+
+@bp.route('/signup/', methods=['POST'])
 def signup():
-    form = UserCreateForm()
-    if request.method == 'POST' and form.validate_on_submit():
-        user= User.query.filter_by(username=form.username.data).first()
-        if not user:
-            user= User(username=form.username.data, password=generate_password_hash(form.password1.data),
-                       email=form.email.data, pnum=form.pnum.data, admin=form.admin.data)
-            db.session.add(user)
-            db.session.commit()
-            return redirect(url_for('main.index'))
-        else:
-            flash('이미 존재하는 사용자입니다.')
-    return render_template('auth/signup.html',form=form)
-'''
-@bp.route('/signup/',methods=('GET','POST'))
-def signup():
-    if request.method =='POST':
+    params = request.get_json()
+    username = params['username']
+    password = generate_password_hash(params['password'])
+    email = params['email']
+    pnum = params['pnum']
+    admin = params['admin']
+    location = params['location']
+    user = User(username=username, password=password,
+                location=location, email=email, pnum=pnum, admin=admin)
+    db.session.add(user)
+    db.session.commit()
+    # return jsonify(user.serialize())
+    return 200
+
+
+@bp.route('/login/', methods=['POST'])
+def login():
+    try:
         data = request.get_json()
         username = data.get('username')
         password = data.get('password')
-        re_password=data.get('re_password') #비밀번호 확인
-        email=data.get('email')
-        pnum=data.get('pnum')
-        admin=data.get('admin')
 
-    else: #GET 방식일 경우 User 전체 조회 코드
-        users=User.query.all()
-        res=jsonify([user.serialize() for user in users])
+        user = User.query.filter_by(username=username).first()
 
-    return res
-
-'''
-@bp.route('/login/',methods=('GET','POST'))
-def login():
-    form=UserLoginForm()
-    if request.method=='POST' and form.validate_on_submit():
-        error=None
-        user = User.query.filter_by(username=form.username.data).first()
         if not user:
-            error="존재하지 않는 사용자입니다."
-        elif not check_password_hash(user.password, form.password.data):
-            error="비밀번호가 올바르지 않습니다."
-        if error is None:
-            session.clear()
-            session['user_id']=user.id
-            return redirect(url_for('post.read_posts'))
-        flash(error)
-    return render_template('auth/login.html',form=form)
-'''
+            return jsonify({'message': '존재하지 않는 사용자입니다.'}), 404
 
+        if not check_password_hash(user.password, password):
+            return jsonify({'message': '비밀번호가 올바르지 않습니다.'}), 401
 
+        session.clear()
+        session['user_id'] = user.id
 
-@bp.before_app_request
-def load_logged_in_user():
-    user_id=session.get('user_id')
-    if user_id is None:
-        g.user=None
-    else:
-        g.user=User.query.get(user_id)
+        return jsonify({'message': '로그인에 성공했습니다.'}), 200
 
-@bp.route('/logout')
-def logout():
-    session.clear()
-    return redirect(url_for('main.index'))
-
-def login_required(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for('auth.login'))
-        return view(**kwargs)
-    return wrapped_view
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
