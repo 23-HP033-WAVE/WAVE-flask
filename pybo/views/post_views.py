@@ -1,12 +1,10 @@
-from flask import Flask, Blueprint, redirect, url_for, request, jsonify
-from pybo.s3_helper import save_to_s3
+from flask import Blueprint, redirect, url_for, request, jsonify
 from datetime import datetime
-
 from pybo import db
+
 from pybo.models import Post, User, Badge
 
 bp = Blueprint('post', __name__, url_prefix='/posts')
-app = Flask(__name__)
 
 
 @bp.route('/list/', methods=['GET'])
@@ -28,16 +26,13 @@ def create():
     params = request.get_json()
     subject = params['subject']
     content = params['content']
-    image = params['image']
     address = params['address']
-    # user = User.query.get(g.user.id)
     user_id = params['user_id']
-    if image:
-        image_key = save_to_s3(image, app.config['AWS_BUCKET_NAME'])
-    else:
-        image_key = None
 
     created_date = datetime.now()
+
+    # 이미지 키를 json으로 전달받아야 함.
+    image_key = params['image_key']
 
     post = Post(subject=subject, content=content, created_date=created_date,
                 address=address, image_key=image_key, reporter_id=user_id)
@@ -80,10 +75,9 @@ def edit(post_id):
     post.subject = params['subject']
     post.content = params['content']
     post.address = params['address']
-    image = params['image']
-    if image:
-        image_key = save_to_s3(image, app.config['AWS_BUCKET_NAME'])
-        post.image_key = image_key
+    image_key = params['image_key']
+
+    post.image_key = image_key
     db.session.commit()
     result = jsonify([post.serialize()])
     return result
@@ -102,6 +96,4 @@ def search():
                     Post.address.ilike(kw) |
                     User.username.ilike(kw)).distinct()
     return jsonify([post.serialize() for post in post_list])
-
-
 

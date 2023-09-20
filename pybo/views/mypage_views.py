@@ -3,10 +3,13 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from pybo.s3_helper import save_to_s3
 
 from pybo import db
+
+import config
+
 from pybo.models import User
 
+
 bp = Blueprint('mypage', __name__, url_prefix='/mypage')
-app = Flask(__name__)
 
 
 @bp.route('/<int:user_id>/', methods=['GET'])
@@ -25,10 +28,9 @@ def modify_user(userid): #회원정보 수정
     user.username = params['username']
     user.email = params['email']
     user.pnum = params['pnum']
-    image = params['image']
-    if image:
-        user_img = save_to_s3(image, app.config['AWS_BUCKET_NAME'])
-        user.user_img = user_img
+    user_img = params['user_img']
+
+    user.user_img = user_img
     db.session.commit()
     return jsonify([user.serialize()])
 
