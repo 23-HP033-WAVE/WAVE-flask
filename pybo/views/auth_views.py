@@ -53,7 +53,7 @@ def login():
         return jsonify({'message': str(e)})
 
 
-@bp.route('/logout/', methods=['POST'])
+@bp.route('/logout/', methods=['GET', 'POST'])
 def logout():
     session.clear()
     return jsonify({'message': '로그아웃에 성공했습니다.'})
