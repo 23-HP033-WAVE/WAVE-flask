@@ -20,7 +20,6 @@ def signup():
     admin = params['admin']
     user_img = params['user_img']
 
-
     location = params['location']
     user = User(username=username, password=password,
                 location=location, email=email, pnum=pnum, admin=admin, user_img=user_img)
@@ -53,7 +52,8 @@ def login():
     except Exception as e:
         return jsonify({'message': str(e)})
 
-@bp.route('/logout/',methods='POST')
+
+@bp.route('/logout/', methods=['POST'])
 def logout():
     session.clear()
     return jsonify({'message': '로그아웃에 성공했습니다.'})
