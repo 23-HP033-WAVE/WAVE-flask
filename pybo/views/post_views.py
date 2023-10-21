@@ -41,7 +41,7 @@ def create():
 
     post_list = Post.query.order_by(Post.created_date.desc())
     user = User.query.get(user_id)
-    user_post_list = post_list.filter(Post.reporter == user)
+    user_post_list = post_list.filter(Post.reporter_id == user_id)
     if user_post_list.count() == 1:
         badge = Badge.query.get_or_404(1)
         user.badges.append(badge)
