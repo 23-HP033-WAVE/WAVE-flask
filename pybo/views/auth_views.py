@@ -51,7 +51,7 @@ def login():
         return jsonify({'message': '로그인에 성공했습니다.'})
 
     except Exception as e:
-        return jsonify({'message': str(e)}), 500
+        return jsonify({'message': str(e)})
 
 @bp.route('/logout/',methods='POST')
 def logout():
