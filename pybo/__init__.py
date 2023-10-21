@@ -49,3 +49,8 @@ def create_app(test_config = None):
     app.register_blueprint(detect_views.bp)
 
     return app
+
+
+if __name__ == '__main__':
+    app = create_app()  # 애플리케이션을 생성합니다.
+    app.run(host='0.0.0.0', port=80)  # 0.0.0.0 주소에서 80 포트로 애플리케이션을 실행합니다.

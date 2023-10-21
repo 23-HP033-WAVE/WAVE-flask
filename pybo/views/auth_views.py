@@ -26,8 +26,8 @@ def signup():
                 location=location, email=email, pnum=pnum, admin=admin, user_img=user_img)
     db.session.add(user)
     db.session.commit()
-    # return jsonify(user.serialize())
-    return 200
+    return jsonify(user.serialize())
+    # return 200
 
 
 @bp.route('/login/', methods=['POST'])
@@ -48,7 +48,7 @@ def login():
         session.clear()
         session['user_id'] = user.id
 
-        return jsonify({'message': '로그인에 성공했습니다.'}), 200
+        return jsonify({'message': '로그인에 성공했습니다.'})
 
     except Exception as e:
         return jsonify({'message': str(e)}), 500
@@ -66,6 +66,5 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = User.query.get(user_id)
-
 
 
