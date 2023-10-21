@@ -30,12 +30,20 @@ def save_image(file):
     file_path = os.path.join(upload_dir, file.filename)
     file.save(file_path)
 
+def s3_get_image_url(s3, filename):
+    """
+    s3 : 연결된 s3 객체(boto3 client)
+    filename : s3에 저장된 파일 명
+    """
+    location = s3.get_bucket_location(Bucket={'내가 설정한 버킷이름'})["LocationConstraint"]
+    return f"https://{{'내가 설정한 버킷이름'}}.s3.{location}.amazonaws.com/{filename}.jpg"
 
 @bp.route('/predict/', methods=['POST'])
 def predict():
     if request.method == 'POST':
 
-        file = request.files['File']
+        #file = request['image'] #url로 변경시켜야합니다
+        file=s3_get_image_url('',request['image'])
         save_image(file)  # 들어오는 이미지 저장
 
         train_img = os.path.join(current_app.config['UPLOAD_FOLDER'], 'tmp')
