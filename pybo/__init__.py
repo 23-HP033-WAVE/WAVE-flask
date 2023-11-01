@@ -24,6 +24,7 @@ def create_app(test_config = None):
     # app.config.from_object(config)
     # app.config['UPLOAD_FOLDER'] = os.getcwd() + '/'
     app.config.from_envvar('APP_CONFIG_FILE')
+    app.config['JSON_AS_ASCII'] = False
 
     pymysql.install_as_MySQLdb()
 
