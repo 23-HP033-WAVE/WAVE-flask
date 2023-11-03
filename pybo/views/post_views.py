@@ -50,7 +50,8 @@ def create():
     db.session.add(post)
     db.session.commit()
 
-    post_list = Post.query.order_by(Post.created_date.desc())
+    # post_list = Post.query.order_by(Post.created_date.desc())
+    post_list = Post.query.all()
     user = User.query.get(user_id)
     user_post_list = post_list.filter(Post.reporter_id == user_id)
     if user_post_list.count() == 1:
@@ -71,7 +72,7 @@ def create():
     return jsonify(post.serialize)
 
 
-@bp.route('/delete/<int:post_id>/', methods=['DELETE'])
+@bp.route('/delete/<int:post_id>/', methods=['GET', 'DELETE'])
 def delete_post(post_id):
     post = Post.query.get_or_404(post_id)
 

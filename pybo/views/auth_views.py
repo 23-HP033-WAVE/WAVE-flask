@@ -44,12 +44,13 @@ def login():
         # session.clear()
         session['user_id'] = user.id
 
-        return jsonify({'message': '로그인에 성공했습니다.'}), 200
+        return jsonify({'message': '로그인에 성공했습니다.'})
 
     except Exception as e:
-        return jsonify({'message': str(e)}), 500
+        return jsonify({'message': str(e)})
 
-@bp.route('/logout/',methods=['POST'])
+
+@bp.route('/logout/', methods=['GET', 'POST'])
 def logout():
     session.clear()
     return jsonify({'message': '로그아웃에 성공했습니다.'})
@@ -62,6 +63,5 @@ def logout():
 #         g.user = None
 #     else:
 #         g.user = User.query.get(user_id)
-
 
 

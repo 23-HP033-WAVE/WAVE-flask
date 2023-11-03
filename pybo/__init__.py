@@ -21,9 +21,15 @@ migrate = Migrate()
 
 def create_app(test_config = None):
     app = Flask(__name__)
+    # app.config.from_object(config)
+    # app.config['UPLOAD_FOLDER'] = os.getcwd() + '/'
     app.config.from_envvar('APP_CONFIG_FILE')
+    app.config['JSON_AS_ASCII'] = False
 
     pymysql.install_as_MySQLdb()
+
+    # MySQL 데이터베이스 URL 설정
+    # app.config['SQLALCHEMY_DATABASE_URI'] = config.DB_URL
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -44,3 +50,8 @@ def create_app(test_config = None):
     app.register_blueprint(detect_views.bp)
 
     return app
+
+
+if __name__ == '__main__':
+    app = create_app()  # 애플리케이션을 생성합니다.
+    app.run(host='0.0.0.0', port=80)  # 0.0.0.0 주소에서 80 포트로 애플리케이션을 실행합니다.
