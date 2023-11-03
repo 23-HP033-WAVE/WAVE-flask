@@ -16,14 +16,14 @@ def signup():
     password = generate_password_hash(params['password'])
     email = params['email']
     pnum = params['pnum']
-    admin = params['admin']
+    # admin = params['admin']
     location = params['location']
     user = User(username=username, password=password,
-                location=location, email=email, pnum=pnum, admin=admin)
+                 email=email, pnum=pnum, location=location)
     db.session.add(user)
     db.session.commit()
-    # return jsonify(user.serialize())
-    return 200
+    return jsonify(user.serialize())
+    # return 200
 
 
 @bp.route('/login/', methods=['POST'])
@@ -41,7 +41,7 @@ def login():
         if not check_password_hash(user.password, password):
             return jsonify({'message': '비밀번호가 올바르지 않습니다.'}), 401
 
-        session.clear()
+        # session.clear()
         session['user_id'] = user.id
 
         return jsonify({'message': '로그인에 성공했습니다.'}), 200
@@ -49,19 +49,19 @@ def login():
     except Exception as e:
         return jsonify({'message': str(e)}), 500
 
-@bp.route('/logout/',methods='POST')
+@bp.route('/logout/',methods=['POST'])
 def logout():
     session.clear()
     return jsonify({'message': '로그아웃에 성공했습니다.'})
 
 
-@bp.before_app_request
-def load_logged_in_user():
-    user_id = session.get('user_id')
-    if user_id is None:
-        g.user = None
-    else:
-        g.user = User.query.get(user_id)
+# @bp.before_app_request
+# def load_logged_in_user():
+#     user_id = session.get('user_id')
+#     if user_id is None:
+#         g.user = None
+#     else:
+#         g.user = User.query.get(user_id)
 
 
 

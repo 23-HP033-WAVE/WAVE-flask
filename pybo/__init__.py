@@ -21,13 +21,9 @@ migrate = Migrate()
 
 def create_app(test_config = None):
     app = Flask(__name__)
-    app.config.from_object(config)
-    app.config['UPLOAD_FOLDER'] = os.getcwd() + '/'
+    app.config.from_envvar('APP_CONFIG_FILE')
 
     pymysql.install_as_MySQLdb()
-
-    # MySQL 데이터베이스 URL 설정
-    app.config['SQLALCHEMY_DATABASE_URI'] = config.DB_URL
 
     db.init_app(app)
     migrate.init_app(app, db)

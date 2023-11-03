@@ -71,7 +71,7 @@ class Post(db.Model):
         'user.id', ondelete='CASCADE'), nullable=False)
     reporter = db.relationship('User', backref=db.backref('post_set'))
     image_key = db.Column(db.String(100))
-
+    image_detect = db.Column(db.String(100))
     def serialize(self):
         return {
             'id': self.id,
