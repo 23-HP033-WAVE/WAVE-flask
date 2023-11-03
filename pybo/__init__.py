@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData, create_engine
 import os
 import pymysql #pip install pymysql
+import config
 
 import config
 
