@@ -10,6 +10,9 @@ import torch
 from PIL import Image
 import os
 
+import boto3
+from botocore.exceptions import NoCredentialsError
+
 bp = Blueprint('detect',__name__, url_prefix='/detect')
 
 # yolo model 불러오기
@@ -18,25 +21,45 @@ model = torch.hub.load('./pybo/yolov5', 'custom', path='./pybo/yolov5/runs/train
 
 # POST 통신으로 들어오는 이미지를 저장하고 모델로 추론하는 과정
 def save_image(file):
+    # # 저장 디렉토리 생성
+    # upload_dir = os.path.join(current_app.config['UPLOAD_FOLDER'], 'tmp')
+    #
+    # # 저장 디렉토리가 없으면 생성
+    # if not os.path.exists(upload_dir):
+    #     os.makedirs(upload_dir)
+    #
+    # # 파일 저장
+    # file_path = os.path.join(upload_dir, file.filename)
+    # file.save(file_path)
+    bucket_name='wave-project-bucket'
 
-    # 저장 디렉토리 생성
-    upload_dir = os.path.join(current_app.config['UPLOAD_FOLDER'], 'tmp')
-
-    # 저장 디렉토리가 없으면 생성
-    if not os.path.exists(upload_dir):
-        os.makedirs(upload_dir)
-
-    # 파일 저장
-    file_path = os.path.join(upload_dir, file.filename)
-    file.save(file_path)
+    try:
+        s3 = boto3.client(
+            's3',
+            aws_access_key_id=current_app.config['AWS_ACCESS_KEY'],
+            aws_secret_access_key=current_app.config['AWS_SECRET_KEY'],
+            region_name=current_app.config['AWS_REGION']
+        )
+        s3.upload_fileobj(
+            file,
+            bucket_name,
+            file.filename,
+            ExtraArgs={
+                "ACL": "public-read",
+                "ContentType": file.content_type
+            }
+        )
+        return file.filename
+    except NoCredentialsError:
+        return None
 
 def s3_get_image_url(s3, filename):
     """
     s3 : 연결된 s3 객체(boto3 client)
     filename : s3에 저장된 파일 명
     """
-    location = s3.get_bucket_location(Bucket={'내가 설정한 버킷이름'})["LocationConstraint"]
-    return f"https://{{'내가 설정한 버킷이름'}}.s3.{location}.amazonaws.com/{filename}.jpg"
+    location = s3.get_bucket_location(Bucket={'wave-project-bucket'})["LocationConstraint"]
+    return f"https://{{'wave-project-bucket'}}.s3.{location}.amazonaws.com/{filename}.jpg"
 
 @bp.route('/predict/', methods=['POST'])
 def predict():
