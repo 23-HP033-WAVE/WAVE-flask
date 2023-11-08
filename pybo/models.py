@@ -83,6 +83,7 @@ class Post(db.Model):
             'address': self.address,
             'reporter_id': self.reporter_id,
             'image_key': self.image_key,
+            'image_detect': self.image_detect,
         }
 
 
@@ -97,6 +98,7 @@ class Post(db.Model):
             'address': self.address,
             'reporter_id': self.reporter_id,
             'image_key': self.image_key,
+            'image_detect': self.image_detect
         }
 
 
