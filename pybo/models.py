@@ -70,7 +70,8 @@ class Post(db.Model):
     reporter_id = db.Column(db.Integer, db.ForeignKey(
         'user.id', ondelete='CASCADE'), nullable=False)
     reporter = db.relationship('User', backref=db.backref('post_set'))
-    image_key = db.Column(db.String(100))
+    image_key = db.Column(db.String(100)),
+    image_detect = db.Column(db.String(100))
 
     def serialize(self):
         return {
@@ -83,6 +84,7 @@ class Post(db.Model):
             'address': self.address,
             'reporter_id': self.reporter_id,
             'image_key': self.image_key,
+            'image_detect': self.image_detect,
         }
 
 
@@ -97,6 +99,7 @@ class Post(db.Model):
             'address': self.address,
             'reporter_id': self.reporter_id,
             'image_key': self.image_key,
+            'image_detect': self.image_detect
         }
 
 
