@@ -33,9 +33,10 @@ def create():
 
     # 이미지 키를 json으로 전달받아야 함.
     image_key = params['image_key']
+    image_detect = params['image_detect']
 
     post = Post(subject=subject, content=content, created_date=created_date,
-                address=address, image_key=image_key, reporter_id=user_id)
+                address=address, image_key=image_key,image_detect=image_detect, reporter_id=user_id)
     db.session.add(post)
     db.session.commit()
 

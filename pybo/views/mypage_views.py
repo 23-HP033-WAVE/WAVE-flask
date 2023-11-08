@@ -3,7 +3,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from pybo.s3_helper import save_to_s3
 
 from pybo import db
-
 import config
 
 from pybo.models import User
