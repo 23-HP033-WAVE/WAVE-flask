@@ -1,11 +1,8 @@
-from flask import Blueprint, redirect, url_for, request, jsonify, current_app
+from flask import Blueprint, redirect, url_for, request, jsonify
 from datetime import datetime
 from pybo import db
 
 from pybo.models import Post, User, Badge
-from pybo.s3_helper import save_to_s3, download_file_from_s3
-
-import json
 
 bp = Blueprint('post', __name__, url_prefix='/posts')
 
@@ -26,27 +23,20 @@ def read_post(post_id):
 
 @bp.route('/create/', methods=['POST'])
 def create():
-    image=request.files['images']
-    params=json.loads(request.form.get('json'))
-
-    # params = request.get_json()
+    params = request.get_json()
     subject = params['subject']
     content = params['content']
     address = params['address']
     user_id = params['user_id']
+
     created_date = datetime.now()
 
-    if image:
-        image_key = save_to_s3(image, current_app.config['AWS_BUCKET_NAME'])
-    else:
-        image_key = None
-
-
     # 이미지 키를 json으로 전달받아야 함.
-    # image_key = params['image_key']
+    image_key = params['image_key']
+    image_detect = params['image_detect']
 
     post = Post(subject=subject, content=content, created_date=created_date,
-                address=address, image_key=image_key, reporter_id=user_id)
+                address=address, image_key=image_key,image_detect=image_detect, reporter_id=user_id)
     db.session.add(post)
     db.session.commit()
 
@@ -66,10 +56,8 @@ def create():
         badge = Badge.query.get_or_404(3)
         user.badges.append(badge)
         db.session.commit()
-    # return jsonify(post.serialize())
-    # return '{}\n{}\n'.format(str(image), str(params['subject']))
 
-    return jsonify(post.serialize)
+    return jsonify(post.serialize())
 
 
 @bp.route('/delete/<int:post_id>/', methods=['GET', 'DELETE'])
