@@ -43,16 +43,18 @@ def create():
     # post_list = Post.query.order_by(Post.created_date.desc())
     post_list = Post.query.all()
     user = User.query.get(user_id)
-    user_post_list = post_list.filter(Post.reporter_id == user_id)
-    if user_post_list.count() == 1:
+    # user_post_list = post_list.filter(Post.reporter_id == user_id)
+    user_post_list = [post for post in post_list if post.reporter_id == user_id]
+
+    if len(user_post_list) == 1:
         badge = Badge.query.get_or_404(1)
         user.badges.append(badge)
         db.session.commit()
-    elif user_post_list.count() == 3:
+    elif len(user_post_list) == 3:
         badge = Badge.query.get_or_404(2)
         user.badges.append(badge)
         db.session.commit()
-    elif user_post_list.count() == 5:
+    elif len(user_post_list) == 5:
         badge = Badge.query.get_or_404(3)
         user.badges.append(badge)
         db.session.commit()
